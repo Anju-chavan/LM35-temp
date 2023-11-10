@@ -1,0 +1,55 @@
+// Define the analog pin for LM35 temperature sensor
+const int lm35Pin = A0;
+
+// Define the onboard LED pin
+const int ledPin = 13;
+
+// Define temperature thresholds
+const int temperatureThresholdLow = 30;  // in degrees Celsius
+
+// Variables to store temperature readings
+int temperature = 0;
+
+// Function to read temperature from LM35 sensor
+int readTemperature() {
+  // Read the analog value from LM35 sensor
+  int sensorValue = analogRead(lm35Pin);
+
+  // Convert analog value to temperature in degrees Celsius
+  temperature = (sensorValue * 500) / 1024;
+
+  return temperature;
+}
+
+void setup() {
+  // Set the LED pin as an output
+  pinMode(ledPin, OUTPUT);
+
+  // Serial communication for debugging (optional)
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Read temperature
+  int currentTemperature = readTemperature();
+
+  // Debugging output (optional)
+  Serial.print("Temperature: ");
+  Serial.print(currentTemperature);
+  Serial.println(" °C");
+
+  // Check temperature conditions and control LED
+  if (currentTemperature < temperatureThresholdLow) {
+    // Temperature below 30 degrees Celsius, blink every 250 milliseconds
+    digitalWrite(ledPin, HIGH);
+    delay(250);
+    digitalWrite(ledPin, LOW);
+    delay(250);
+  } else {
+    // Temperature above or equal to 30 degrees Celsius, blink every 500 milliseconds
+    digitalWrite(ledPin, HIGH);
+    delay(500);
+    digitalWrite(ledPin, LOW);
+    delay(500);
+  }
+}
